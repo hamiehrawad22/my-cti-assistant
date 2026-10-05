@@ -60,11 +60,11 @@ final class AiAssistantTest extends TestCase
     {
         $assessment = new FindingAssessment();
         $assessment->summary = 'Test';
-        $assessment->severity = 'super-critical'; // invalid enum
+        $assessment->severity = 'super-critical'; 
         $assessment->likelyImpact = 'Test';
         $assessment->remediationSteps = ['Test'];
         $assessment->references = ['Test'];
-        $assessment->confidence = 0.5; // valid — only severity should fail
+        $assessment->confidence = 0.5; 
 
         $violations = $this->createValidator()->validate($assessment);
 
@@ -79,7 +79,7 @@ final class AiAssistantTest extends TestCase
         $assessment->likelyImpact = 'Test';
         $assessment->remediationSteps = ['Test'];
         $assessment->references = ['Test'];
-        $assessment->confidence = 1.5; // invalid range
+        $assessment->confidence = 1.5; 
 
         $violations = $this->createValidator()->validate($assessment);
 
