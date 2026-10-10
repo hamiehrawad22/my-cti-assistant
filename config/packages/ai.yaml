@@ -2,12 +2,23 @@ ai:
     platform:
         gemini:
             api_key: '%env(GEMINI_API_KEY)%'
+        ollama:
+            endpoint: 'http://localhost:11434'
 
     agent:
         default:
             platform: 'ai.platform.gemini'
             model: '%env(AI_MODEL)%'
-            prompt: 'You are a helpful assistant.'
+            prompt: 'You are a helpful CTI analyst assistant. Answer only from provided sources.'
+        local:
+            platform: 'ai.platform.ollama'
+            model: 'llama3.2'
+            prompt: 'You are a helpful CTI analyst assistant. Answer only from provided sources.'
 
-    store:
-        memory: ~
+    model:
+        gemini:
+            gemini-embedding-001:
+                class: 'Symfony\AI\Platform\Bridge\Gemini\Embeddings'
+                capabilities:
+                    - !php/const Symfony\AI\Platform\Capability::EMBEDDINGS
+                    - !php/const Symfony\AI\Platform\Capability::INPUT_TEXT

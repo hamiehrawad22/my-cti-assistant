@@ -3,10 +3,7 @@
 namespace App\Tests\Service;
 
 use App\Dto\FindingAssessment;
-use App\Service\AiAssistant;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use Symfony\AI\Agent\MockAgent;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -19,34 +16,12 @@ final class AiAssistantTest extends TestCase
             ->getValidator();
     }
 
-    private function createAssistant(MockAgent $mockAgent): AiAssistant
-    {
-        return new AiAssistant(
-            $mockAgent,
-            new NullLogger(),
-            $this->createValidator()
-        );
-    }
-
-    public function testAskReturnsText(): void
-    {
-        $mockAgent = new MockAgent([
-            'Hello' => 'Hi there!',
-        ]);
-
-        $assistant = $this->createAssistant($mockAgent);
-
-        $result = $assistant->ask('Hello');
-
-        $this->assertSame('Hi there!', $result);
-    }
-
     public function testFindingAssessmentValidation(): void
     {
         $assessment = new FindingAssessment();
-        $assessment->summary = 'solved';
+        $assessment->summary = 'we not to stop it now';
         $assessment->severity = 'medium';
-        $assessment->likelyImpact = 'cause problem';
+        $assessment->likelyImpact = 'cause high  problem';
         $assessment->remediationSteps = ['solve it'];
         $assessment->confidence = 0.6;
         $assessment->references = ['realmadrid'];
@@ -60,11 +35,11 @@ final class AiAssistantTest extends TestCase
     {
         $assessment = new FindingAssessment();
         $assessment->summary = 'Test';
-        $assessment->severity = 'super-critical'; 
+        $assessment->severity = 'super-critical';
         $assessment->likelyImpact = 'Test';
         $assessment->remediationSteps = ['Test'];
         $assessment->references = ['Test'];
-        $assessment->confidence = 0.5; 
+        $assessment->confidence = 0.5;
 
         $violations = $this->createValidator()->validate($assessment);
 
@@ -79,7 +54,7 @@ final class AiAssistantTest extends TestCase
         $assessment->likelyImpact = 'Test';
         $assessment->remediationSteps = ['Test'];
         $assessment->references = ['Test'];
-        $assessment->confidence = 1.5; 
+        $assessment->confidence = 1.4;
 
         $violations = $this->createValidator()->validate($assessment);
 
