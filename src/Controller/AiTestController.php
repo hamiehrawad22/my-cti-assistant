@@ -2,29 +2,25 @@
 
 namespace App\Controller;
 
-use Symfony\AI\Agent\AgentInterface;
-use Symfony\AI\Platform\Message\Message;
-use Symfony\AI\Platform\Message\MessageBag;
+use App\Service\AiAssistant;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AiTestController
+class AiTestController extends AbstractController
 {
     public function __construct(
-        private readonly AgentInterface $agent
+        private readonly AiAssistant $aiAssistant,
     ) {
     }
 
-    #[Route('/test-ai', name: 'test_ai')]
-    public function test(): Response
+    #[Route('/test-assess', name: 'test_assess')]
+    public function assess(Request $request): Response
     {
-        $messages = new MessageBag(
-            Message::forSystem('You are a helpful assistant.'),
-            Message::ofUser('Hello, how are you?')
-        );
+        $finding = $request->query->get('finding', 'SQL injection in login form');
+        $tenant  = $request->query->get('tenant', 'tenant-a');
 
-        $response = $this->agent->call($messages);
-
-        return new Response($response->getContent());
+        return $this->json($this->aiAssistant->assessFinding($finding, $tenant));
     }
 }
