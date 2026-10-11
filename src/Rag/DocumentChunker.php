@@ -8,8 +8,18 @@ final class DocumentChunker
         private readonly int $maxChars = 800,
         private readonly int $overlap = 100,
     ) {
+        if ($maxChars <= 0) {
+            throw new \InvalidArgumentException('maxChars must be greater than 0.');
+        }
+
+        if ($overlap < 0 || $overlap >= $maxChars) {
+            throw new \InvalidArgumentException('overlap must be between 0 and maxChars - 1.');
+        }
     }
 
+    /**
+     * @return string[]
+     */
     public function chunk(string $text): array
     {
         $text = $this->normalize($text);
@@ -33,18 +43,9 @@ final class DocumentChunker
         return $chunks;
     }
 
+   
     private function normalize(string $text): string
     {
-        $text = str_replace(["\r\n", "\r", "\n", "\t"], ' ', $text);
-
-        $clean = '';
-
-        foreach (explode(' ', $text) as $word) {
-            if ($word !== '') {
-                $clean .= $word . ' ';
-            }
-        }
-
-        return trim($clean);
+        return trim(preg_replace('/\s+/u', ' ', $text));
     }
 }
