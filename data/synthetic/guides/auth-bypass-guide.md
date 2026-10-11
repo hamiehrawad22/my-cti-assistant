@@ -1,23 +1,18 @@
-# Finding: Reflected XSS in Search Page
+# Remediation Guide: Authentication Bypass
 
-**ID:** SYNTH-002
-**Severity:** High
-**Tenant:** tenant-a
-**Asset:** EXAMPLE_WEB_APP_1
+**Type:** auth-bypass
+**Source:** OWASP Cheat Sheet Series (adapted, synthetic example)
+**Tenant:** global
 
-## Description
-The `q` parameter on the search page is reflected into HTML without encoding.
-An attacker can inject script tags via a crafted URL.
+## Summary
+Authentication bypass lets an attacker access protected resources without valid credentials.
 
-## Evidence
-- Parameter: `q`
-- Payload: `<script>alert(1)</script>`
-- Endpoint: `https://example.test/search?q=`
+## Steps
+1. Centralize authentication in one service.
+2. Never trust client-supplied role or user identifiers.
+3. Enforce authorization on every request, deny by default.
+4. Add rate limiting and account lockout.
+5. Test negative cases (no token, wrong role, expired token).
 
-## Impact
-Session theft, credential phishing, page defacement in the victim's browser.
-
-## Remediation
-- HTML-encode all output.
-- Add a Content-Security-Policy header.
-- Validate and reject unsafe input patterns.
+## References
+- https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/

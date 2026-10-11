@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Rag\SyntheticDocumentLoader;
 use App\Service\AiAssistant;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,5 +23,25 @@ class AiTestController extends AbstractController
         $tenant  = $request->query->get('tenant', 'tenant-a');
 
         return $this->json($this->aiAssistant->assessFinding($finding, $tenant));
+    }
+
+    #[Route('/rag-test', name: 'rag_test')]
+    public function ragTest(SyntheticDocumentLoader $loader): Response
+    {
+        $docs = $loader->load();
+
+        return $this->json([
+            'total_chunks' => count($docs),
+            'by_source'    => array_count_values(array_column($docs, 'source')),
+            'by_tenant'    => array_count_values(array_column($docs, 'tenant')),
+            'by_type'      => array_count_values(array_column($docs, 'type')),
+            'chunks'       => array_map(static fn ($d) => [
+                'id'      => $d['id'],
+                'source'  => $d['source'],
+                'tenant'  => $d['tenant'],
+                'type'    => $d['type'],
+                'preview' => substr($d['text'], 0, 100) . '...',
+            ], $docs),
+        ]);
     }
 }

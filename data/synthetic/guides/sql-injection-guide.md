@@ -1,25 +1,19 @@
-# Finding: SQL Injection in Login Form
+# Remediation Guide: SQL Injection
 
-**ID:** SYNTH-001
-**Severity:** Critical
-**Tenant:** tenant-a
-**Asset:** EXAMPLE_WEB_APP_1
+**Type:** sqli
+**Source:** OWASP Cheat Sheet Series (adapted, synthetic example)
+**Tenant:** global
 
-## Description
-A SQL injection vulnerability exists in the login form of EXAMPLE_WEB_APP_1.
-User input in the `username` parameter is concatenated directly into a SQL query
-without parameterization. An attacker can bypass authentication or extract data.
+## Summary
+SQL injection occurs when untrusted input is interpreted as SQL code.
 
-## Evidence
-- Parameter: `username`
-- Payload: `' OR '1'='1`
-- Endpoint: `https://example.test/login`
+## Steps
+1. Use parameterized queries or prepared statements everywhere.
+2. Never concatenate user input into SQL strings.
+3. Validate input types and lengths at the boundary.
+4. Use a database account with least privilege.
+5. Log and alert on SQL error patterns.
 
-## Impact
-Full authentication bypass. Potential access to all user records and
-configuration tables.
-
-## Remediation
-- Use parameterized queries.
-- Validate and sanitize all inputs.
-- Apply least privilege to the database account.
+## References
+- https://owasp.org/www-community/attacks/SQL_Injection
+- https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html

@@ -55,7 +55,7 @@ final class SyntheticDocumentLoader
 
     private function detectType(string $relativePath): string
     {
-        return str_contains($relativePath, '/guides/') ? 'guide' : 'finding';
+        return str_starts_with($relativePath, 'guides/') ? 'guide' : 'finding';
     }
 
     private function detectTenant(string $content): string
@@ -74,3 +74,4 @@ final class SyntheticDocumentLoader
         return 'global';
     }
 }
+

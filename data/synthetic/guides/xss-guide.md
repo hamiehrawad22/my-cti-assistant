@@ -1,24 +1,18 @@
-# Finding: Broken Access Control on Admin API
+# Remediation Guide: Cross-Site Scripting (XSS)
 
-**ID:** SYNTH-003
-**Severity:** High
-**Tenant:** tenant-b
-**Asset:** EXAMPLE_ADMIN_API
+**Type:** xss
+**Source:** OWASP Cheat Sheet Series (adapted, synthetic example)
+**Tenant:** global
 
-## Description
-The admin API endpoint `/api/v1/admin/users` does not verify the caller's role.
-Any authenticated user can list and modify all users.
+## Summary
+XSS occurs when untrusted input is rendered as HTML or JavaScript.
 
-## Evidence
-- Endpoint: `/api/v1/admin/users`
-- Method: GET, POST, DELETE
-- Expected role: `admin`
-- Observed: any authenticated user succeeds
+## Steps
+1. HTML-encode all output by default.
+2. Use context-aware escaping (HTML, attribute, JS, URL).
+3. Add a strict Content-Security-Policy.
+4. Validate and reject dangerous input patterns.
+5. Use modern frameworks that auto-escape by default.
 
-## Impact
-Privilege escalation. Unauthorized read and write of user accounts.
-
-## Remediation
-- Enforce role checks in a central authorization service.
-- Deny by default.
-- Add tests for unauthorized access paths.
+## References
+- https://owasp.org/www-community/attacks/xss/

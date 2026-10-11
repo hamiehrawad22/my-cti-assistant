@@ -10,6 +10,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Rag\SyntheticDocumentLoader:
+        arguments:
+            $syntheticDir: '%kernel.project_dir%/data/synthetic'
+
     App\Service\AiAssistant:
         arguments:
             $agent: '@ai.agent.default'
